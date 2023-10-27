@@ -1,1 +1,0 @@
-# Python-trials-project-and-samples
