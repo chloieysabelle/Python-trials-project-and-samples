@@ -1,5 +1,13 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import mysql.connector
+
+connection = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        password="",
+        database="projectksksk"
+   )
 
 def create_signup_box():
     signup_box = tk.Frame(root, borderwidth=2, relief="ridge", padx=10, pady=10)
@@ -7,12 +15,12 @@ def create_signup_box():
 
     First_name_label = tk.Label(signup_box, text="First Name:")
     First_name_label.pack(anchor="w")
-    First_name_entry = tk.Entry(signup_box, show="*")  
+    First_name_entry = tk.Entry(signup_box)  
     First_name_entry.pack(fill="x", padx=10, pady=5)
 
     Last_name_label = tk.Label(signup_box, text="Last Name:")
     Last_name_label.pack(anchor="w")
-    Last_name_entry = tk.Entry(signup_box, show="*")  
+    Last_name_entry = tk.Entry(signup_box)  
     Last_name_entry.pack(fill="x", padx=10, pady=5)
 
     email_label = tk.Label(signup_box, text="Email Address:")
@@ -25,16 +33,23 @@ def create_signup_box():
     password_entry = tk.Entry(signup_box, show="*")  
     password_entry.pack(fill="x", padx=10, pady=5)
 
-    create_acc_button = tk.Button(signup_box, text="Create Account", command=signup)
-    create_acc_button.pack(pady=10)
+    entry_variable = tk.StringVar(signup_box, text="Create Account", command=signup)
+    entry.pack(pady=10)
 
 def signup(first_name_entry, last_name_entry, email_entry, password_entry):
 
    first_name = first_name_entry.get()
    last_name = last_name_entry.get()
-   email = email.entry.get()
+   email = email_entry.get()
    password = password_entry.get()
-
+   
+   
+   mycursor = connection.cursor()
+   insert_query = "INSERT INTO user_account (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)"
+   user_data = (first_name, last_name)  
+   mycursor.execute(insert_query, user_data)
+   
+   connection.commit()
 
 root = tk.Tk()
 root.geometry("700x500")
@@ -64,4 +79,7 @@ label.pack(padx=50, pady=10)
 
 create_signup_box()
 
+
 root.mainloop()
+
+
